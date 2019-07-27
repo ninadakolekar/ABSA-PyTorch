@@ -157,6 +157,8 @@ if __name__ == "__main__":
     opt.device = 'cuda'
     opt.inputs_cols = ['text_raw_bert_indices', 'aspect_bert_indices']
     opt.bert_dim = 768
+    opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') \
+        if opt.device is None else torch.device(opt.device)
     
 
     inf = Inferer(opt)
