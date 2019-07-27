@@ -152,6 +152,10 @@ if __name__ == "__main__":
     opt.hops = 3
     opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     opt.pretrained_bert_name = "bert-base-uncased"
+    opt.dropout = 0.1
+    opt.l2reg = 0.01
+    opt.device = 'cuda'
+    opt.inputs_cols = ['text_raw_bert_indices', 'aspect_bert_indices']
     
 
     inf = Inferer(opt)
