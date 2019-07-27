@@ -106,8 +106,6 @@ class Inferer:
 
         test_data_loader = DataLoader(dataset=self.testset, batch_size=1, shuffle=False)
         val_data_loader = DataLoader(dataset=self.valset, batch_size=32, shuffle=False)
-
-        self.model.load_state_dict(torch.load(self.opt.model_path))
         
         self.model.eval()
         val_acc, val_f1 = self._evaluate_acc_f1(val_data_loader)
