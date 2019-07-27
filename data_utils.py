@@ -114,7 +114,7 @@ class Tokenizer4Bert:
         self.max_seq_len = max_seq_len
 
     def text_to_sequence(self, text, reverse=False, padding='post', truncating='post'):
-        sequence = self.tokenizer.tokenize(self.tokenizer.tokenize(text))
+        sequence = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text))
         if len(sequence) == 0:
             sequence = [0]
         if reverse:
@@ -129,10 +129,11 @@ class ABSADataset(Dataset):
         fin.close()
 
         all_data = []
-        for i in range(0, len(lines), 3):
+        for i in range(0, len(lines), 4):
             text_left, _, text_right = [s.lower().strip() for s in lines[i].partition("$T$")]
             aspect = lines[i + 1].lower().strip()
             polarity = lines[i + 2].strip()
+            uhash = lines[i + 3].strip()
 
             text_raw_indices = tokenizer.text_to_sequence(text_left + " " + aspect + " " + text_right)
             text_raw_without_aspect_indices = tokenizer.text_to_sequence(text_left + " " + text_right)
@@ -167,6 +168,7 @@ class ABSADataset(Dataset):
                 'aspect_indices': aspect_indices,
                 'aspect_in_text': aspect_in_text,
                 'polarity': polarity,
+                'hash': uhash
             }
 
             all_data.append(data)
