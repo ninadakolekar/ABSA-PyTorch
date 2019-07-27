@@ -31,6 +31,8 @@ class Inferer:
             tokenizer = Tokenizer4Bert(opt.max_seq_len, opt.pretrained_bert_name)
             bert = BertModel.from_pretrained(opt.pretrained_bert_name)
             self.model = opt.model_class(bert, opt).to(opt.device)
+            self.model.load_state_dict(torch.load(opt.state_dict_path))
+            logger.info(f"Loaded model {opt.model_name} from {opt.state_dict_path}")
         else:
             tokenizer = build_tokenizer(
                 fnames=[opt.dataset_file['train'], opt.dataset_file['test']],
@@ -41,6 +43,7 @@ class Inferer:
                 embed_dim=opt.embed_dim,
                 dat_fname='{0}_{1}_embedding_matrix.dat'.format(str(opt.embed_dim), opt.dataset))
             self.model = opt.model_class(embedding_matrix, opt).to(opt.device)
+            self.model.load_state_dict(torch.load(opt.state_dict_path))
 
         self.valset = ABSADataset(opt.dataset_file['val'], tokenizer)
         self.testset = ABSADataset(opt.dataset_file['test'], tokenizer)
@@ -148,6 +151,8 @@ if __name__ == "__main__":
     opt.polarities_dim = 3
     opt.hops = 3
     opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    opt.pretrained_bert_name = "bert-base-uncased"
+    
 
     inf = Inferer(opt)
     inf.run()
