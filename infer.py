@@ -156,6 +156,7 @@ if __name__ == "__main__":
     opt.l2reg = 0.01
     opt.device = 'cuda'
     opt.inputs_cols = ['text_raw_bert_indices', 'aspect_bert_indices']
+    opt.bert_dim = 768
     
 
     inf = Inferer(opt)
